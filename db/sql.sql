@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON kea.* TO 'kea'@'localhost' IDENTIFIED BY 'kea';
+FLUSH PRIVILEGES;

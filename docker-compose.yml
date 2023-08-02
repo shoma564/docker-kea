@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  kea:
+    build: .
+    image: keadhcp:1.0.0
+    container_name: kea
+    restart: always
+    tty: true
+    depends_on:
+      - kea-db
+#    network_mode: host
+    networks:
+      net1:
+      vlan0:
+        ipv4_address: 172.24.20.211
+
+
+
+  kea-db:
+    container_name: kea-db
+    restart: always
+    build:
+      context: ./db
+    environment:
+      MARIADB_ROOT_PASSWORD: kea
+      MARIADB_DATABASE: kea
+      MARIADB_USER: kea
+      MARIADB_PASSWORD: kea
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./db/data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      net1:
+
+
+networks:
+  net1:
+
+  vlan0:
+    name: vlan0
+    driver: macvlan
+    driver_opts:
+      parent: ens3
+    ipam:
+      config:
+        - subnet: 172.24.20.0/24
+          gateway: 172.24.20.254
