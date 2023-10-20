@@ -1,0 +1,8 @@
+TYPE=TRIGGERS
+triggers='CREATE DEFINER=`kea`@`%` TRIGGER lease6_AINS AFTER INSERT ON lease6 FOR EACH ROW\nBEGIN\n    CALL lease6_AINS_lease6_stat(NEW.state, NEW.subnet_id, NEW.lease_type);\n    IF @json_supported IS NULL THEN\n        SELECT isJsonSupported() INTO @json_supported;\n    END IF;\n    IF @json_supported = 1 THEN\n        CALL lease6_AINS_lease6_stat_by_client_class(NEW.state, NEW.user_context, NEW.lease_type);\n    END IF;\nEND' 'CREATE DEFINER=`kea`@`%` TRIGGER lease6_AUPD AFTER UPDATE ON lease6 FOR EACH ROW\nBEGIN\n    CALL lease6_AUPD_lease6_stat(OLD.state, OLD.subnet_id, OLD.lease_type, NEW.state, NEW.subnet_id, NEW.lease_type);\n    IF @json_supported IS NULL THEN\n        SELECT isJsonSupported() INTO @json_supported;\n    END IF;\n    IF @json_supported = 1 THEN\n        CALL lease6_AUPD_lease6_stat_by_client_class(OLD.state, OLD.user_context, OLD.lease_type, NEW.state, NEW.user_context, NEW.lease_type);\n    END IF;\nEND' 'CREATE DEFINER=`kea`@`%` TRIGGER lease6_ADEL AFTER DELETE ON lease6 FOR EACH ROW\nBEGIN\n    CALL lease6_ADEL_lease6_stat(OLD.state, OLD.subnet_id, OLD.lease_type);\n    IF @json_supported IS NULL THEN\n        SELECT isJsonSupported() INTO @json_supported;\n    END IF;\n    IF @json_supported = 1 THEN\n        CALL lease6_ADEL_lease6_stat_by_client_class(OLD.state, OLD.user_context, OLD.lease_type);\n    END IF;\nEND'
+sql_modes=1411383296 1411383296 1411383296
+definers='kea@%' 'kea@%' 'kea@%'
+client_cs_names='latin1' 'latin1' 'latin1'
+connection_cl_names='latin1_swedish_ci' 'latin1_swedish_ci' 'latin1_swedish_ci'
+db_cl_names='utf8mb4_unicode_ci' 'utf8mb4_unicode_ci' 'utf8mb4_unicode_ci'
+created=1695776804872150 1695776804875904 1695776804879511

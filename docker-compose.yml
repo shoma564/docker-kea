@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 services:
   kea:
     build: .
@@ -8,11 +8,16 @@ services:
     tty: true
     depends_on:
       - kea-db
+
+    ports:
+      - 68:68
+      - 67:67
+
 #    network_mode: host
     networks:
       net1:
-      vlan0:
-        ipv4_address: 172.24.20.211
+#      vlan0:
+#        ipv4_address: 172.24.20.211
 
 
 
@@ -30,6 +35,7 @@ services:
     volumes:
       - ./db/data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
     networks:
       net1:
 
@@ -37,12 +43,12 @@ services:
 networks:
   net1:
 
-  vlan0:
-    name: vlan0
-    driver: macvlan
-    driver_opts:
-      parent: ens3
-    ipam:
-      config:
-        - subnet: 172.24.20.0/24
-          gateway: 172.24.20.254
+#  vlan0:
+#    name: vlan0
+#    driver: macvlan
+#    driver_opts:
+#      parent: ens160
+#    ipam:
+#      config:
+#        - subnet: 172.24.20.0/24
+#          gateway: 172.24.20.254

@@ -1,0 +1,2 @@
+TYPE=TRIGGERNAME
+trigger_table=dhcp4_client_class
